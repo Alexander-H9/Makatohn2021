@@ -74,8 +74,8 @@ if __name__ == '__main__':
     try:
         s = stepper()
         # steps, time between steps, spin in degree, direction
-        s.config(8, 0.002, 360, -1)
-        time.sleep(4)
+        s.config(8, 0.002, 180, -1)
+        time.sleep(2.5)
         
         print('Stepper running ...')
         s.run()

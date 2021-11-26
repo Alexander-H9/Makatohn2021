@@ -7,13 +7,10 @@ import requests
 import json
 import time
 
-class inductor():
+class laser():
     def __init__(self):
         self.ip = ''
         self.lst = []
-        self.data = {
-            'data': self.lst
-        }
         
     def config(self, net):
         lines = []
@@ -33,34 +30,29 @@ class inductor():
         myobj = {"code":"request","cid":4711, "adr":portstr}
         x = requests.post(url, json = myobj)
         y = json.loads(x.text)
-        res = int(y["data"]["value"], 16)>>16
-        return res
+        
+        if y["code"] == 200:   # wenn sensor messung liefert
+            return False        # True da Coin erkannt
+        else:
+            return True
 
     def collectData(self):
-        x = 1 
-        t_end = time.time() + 4
-        while time.time() < t_end:
-            for p in range(7,8):
+        while True:
+            for p in range(5,6):
                 res = self.measure(p)
-                if not res >= 1000:
-                    self.lst.append(res)
-                    x += 1
-                time.sleep(0.005)
+                time.sleep(0.001)
+            if res == True:
+                print("Coin detected!")
+                break
 
 
 if __name__ == '__main__':
     try:
-        i = inductor()
-        i.config('192.168.178.0/24')
+        l = laser()
+        l.config('192.168.178.0/24')
         
-        print("Measuring ...")
-        i.collectData()
-        print('Measuring done')
-        
-        with open('datalist.txt', 'w') as f:
-            f.write(json.dumps(i.data))
-        f.close
-        print('Data exported')
+        print("Waiting for coin ...")
+        l.collectData()
 
     except KeyboardInterrupt:
         pass
