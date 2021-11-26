@@ -2,18 +2,17 @@ import numpy as np
 import json
 from ExtractDataPoints import *
 
-with open("datalist.json") as jsonFile:
+with open("datalist.txt") as jsonFile:
     jsonObject = json.load(jsonFile)
     jsonFile.close()
 
+points = list(jsonObject.values())          # convert json string in python list
 
-print(jsonObject)
-messwerte = jsonObject["data"]
-# print("messwerte values: ", list(messwerte[0].values()))
-# print("messwerte items: ", messwerte[0].items())
+measurement = [points[0][::2]]              # get every second elemnt of the list (time values not needed)
+measurement = measurement[0]                # only the first entry contains the data
+print("messwerte: ", measurement)
 
-points = list(messwerte[0].values())
-print(points)
+
 
 def getKNearestNeighbors(x,X,k=1):          # realizes nearest neighbor search of x in database X
     """
@@ -41,7 +40,7 @@ d = Data()
 
 
 # print("messwerte: ", messwerte)
-d.extract(messwerte)
+d.extract(measurement)
 x = np.array([d.minL, d.minR, d.maxM, d.length])
 print("Data matrix X=\n",X)
 print("Test vector x=",x)
