@@ -31,8 +31,8 @@ class laser():
         x = requests.post(url, json = myobj)
         y = json.loads(x.text)
         
-        if y["code"] == 200:   # wenn sensor messung liefert
-            return False        # True da Coin erkannt
+        if y["code"] == 200:
+            return False
         else:
             return True
 
@@ -42,17 +42,19 @@ class laser():
                 res = self.measure(p)
                 time.sleep(0.001)
             if res == True:
-                print("Coin detected!")
                 break
 
 
 if __name__ == '__main__':
+    #print("### LASER ###")
     try:
         l = laser()
+        print("\nLaser - Configuring")
         l.config('192.168.178.0/24')
         
-        print("Waiting for coin ...")
+        print("Laser - Waiting for coin")
         l.collectData()
+        print("Laser - Coin detected")
 
     except KeyboardInterrupt:
         pass

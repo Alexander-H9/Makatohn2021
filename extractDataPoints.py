@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import copy
 
 class Data:
@@ -15,7 +18,7 @@ class Data:
 
         # print("Data: ", data)
         # print("sorted Data: ", liste)
-        print("Extracting data ...")
+        print("CoinAI - Extracted data")
         #print("len of datavector: ", length)
         endFirstThird = length//3
         endSecondThird = int(length//1.5)

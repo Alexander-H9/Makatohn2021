@@ -71,18 +71,26 @@ class stepper():
 
 
 if __name__ == '__main__':
+    #print("### STEPPER ###")
     try:
         s = stepper()
         # steps, time between steps, spin in degree, direction
         s.config(8, 0.002, 180, -1)
-        time.sleep(2.5)
         
-        print('Stepper running ...')
+        while True:
+            with open('i_status.txt', 'r') as f:
+                i_status = f.read()
+            f.close
+            if i_status == "True":
+                break
+        print("Stepper - Received status")
+        
+        print("Stepper - Running")
         s.run()
+        print("Stepper - Stopped")
         
     except KeyboardInterrupt:
         pass
     
-    print('Stepper stopped')
     for pin in pins:
             GPIO.output(pin, False)

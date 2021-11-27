@@ -4,15 +4,8 @@
 import numpy as np
 import json
 import os
-from gtts import gTTS
 from extractDataPoints import *
-
-def tts(idx, lng):
-    coins = ["2 €", "1 €", "0.5 €", "0.2 €", "0.1 €", "0.05 €", "0.02 €", "0.01 €"]
-    
-    tts = gTTS(coins[idx], lang=lng)
-    tts.save('coin.mp3')  
-    os.system('mpg321 coin.mp3')
+from output import tts
 
 def getKNearestNeighbors(x,X,k=1):          # realizes nearest neighbor search of x in database X
     """
@@ -25,16 +18,15 @@ def getKNearestNeighbors(x,X,k=1):          # realizes nearest neighbor search o
     d=[np.linalg.norm(X[i]-x) for i in range(len(X))]                   
     d = np.argsort(d)
     #print("sort d after index: ", d)
-    print("Getting kNNs ...")
+    print("CoinAI - Calculated kNNs")
     return d[:k]
 
 if __name__ == '__main__':
+    #print("### COIN_AI ###")
     with open("datalist.txt") as jsonFile:
         jsonObject = json.load(jsonFile)
         jsonFile.close()
-
     points = list(jsonObject.values())          # convert json string in python list
-
     measurement = [points[0]]              # get every second elemnt of the list (time values not needed)
     measurement = measurement[0]                # only the first entry contains the data
     # print("messwerte: ", measurement)
@@ -48,7 +40,7 @@ if __name__ == '__main__':
                   [666, 656, 703, 480],     # 10 Cent
                   [378, 347, 415, 650],     # 5 Cent
                   [420, 440, 468, 540],     # 2 Cent
-                  [608, 634, 619, 400],     # 1 Cent 
+                  [608, 634, 619, 400],     # 1 Cent
                   ]);                       # data matrix X: list of data vectors (=database) of dimension D=4
 
     # x = np.array([1.5, 0.6, 0.7, 1.3]);
@@ -57,11 +49,11 @@ if __name__ == '__main__':
 
     # print("messwerte: ", messwerte)
     if not measurement == []:
-        print("Data imported")
+        print("CoinAI - Imported data")
         d.extract(measurement)
         x = np.array([d.minL, d.minR, d.maxM, d.length*10])
         #print("Data matrix X=\n",X)
-        print("Test vector x=",x)
+        #print("CoinAI - Test vector x =",x)
 
         # Print all Euklidean distances to test vector x
         #print("Euklidean distances to x: ", [np.linalg.norm(X[i]-x) for i in range(len(X))])                # compute list of Euklidean distances   
@@ -73,10 +65,10 @@ if __name__ == '__main__':
         #print("idx_knn=",idx_knn)
 
         # output results
-        print("The k Nearest Neighbors of x are the following vectors:")
+        print("\nThe k Nearest Neighbors of x =", x ,"are the following vectors:")
         for i in range(k):
             idx=idx_knn[i]
-            print("The", i+1, "th nearest neighbor is: X[",idx,"]=",X[idx]," with distance ", np.linalg.norm(X[idx]-x))
+            print("The", i+1, "th nearest neighbor is: X[",idx,"] =",X[idx],"with distance", np.linalg.norm(X[idx]-x))
         tts(idx_knn[0], "en")
     else:
-        print('No data available! ')
+        print('CoinAI - No data available!')
